@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-US">
   <head>
     <meta charset="utf-8">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Number guessing game</title>
 
     <style>
@@ -28,6 +28,7 @@
     <h1>Number guessing game</h1>
 
     <p>We have selected a random number between 1 and 100. See if you can guess it in 10 turns or fewer. We'll tell you if your guess was too high or too low.</p>
+    <p>You can submit it by pressing the <kbd>Enter</kbd> key.</p>
 
     <div class="form">
       <!-- 我喜欢可以直接在文本框输入回车就能提交-->
@@ -60,9 +61,11 @@
       var guessCount = 1;
       var resetButton;
 
-      // 检查函数
+      // 检查函数 为了防止表单提交刷新页面这个函数必须返回 false
       function checkGuess() {
+        // console.log('yes');
         var userGuess = Number(guessField.value);
+        if (!userGuess || userGuess < 1 || userGuess > 100) return false;
         if (guessCount === 1) {
           guesses.textContent = 'Previous guesses: ';
         }
@@ -90,6 +93,9 @@
         guessCount++;
         guessField.value = '';
         guessField.focus();
+
+
+        return false;
       }
 
       // 游戏结束函数
@@ -124,10 +130,15 @@
 
       // 事件绑定
       guessSubmit.addEventListener('click', checkGuess);
-      guessForm.addEventListener('submit', checkGuess);
+      guessForm.onsubmit = checkGuess;
 
       // 聚焦
       guessField.focus();
     </script>
+
+    <!--
+      发现
+      当一个表单执行了 submit事件 是 同时也回执行 提交按钮的 click事件
+    -->
   </body>
 </html>
